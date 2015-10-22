@@ -19,7 +19,6 @@ def build_run_example(settings):
         os.chdir(build_folder)
         system('conan install %s' % (settings))
         system('conan build')
-        system("cd bin && .%smd5 .%smd5" % (os.sep, os.sep))
         system("cd bin && .%ssample" % (os.sep))
     finally:
         os.chdir(current_dir)
