@@ -39,10 +39,10 @@ if __name__ == "__main__":
 
         # x86_64, shared
         build_run_example(compiler + '-s build_type=Debug -s arch=x86_64 -s compiler.runtime=MDd -o Poco:poco_static=False')
-        build_run_example(compiler + '-s build_type=Debug -s arch=x86_64 -s compiler.runtime=MTd -o Poco:poco_static=False')
-
+        # MT with shared doesn't work and has no much sense 
+        
         build_run_example(compiler + '-s build_type=Release -s arch=x86_64 -s compiler.runtime=MD -o Poco:poco_static=False')
-        build_run_example(compiler + '-s build_type=Release -s arch=x86_64 -s compiler.runtime=MT -o Poco:poco_static=False')
+        # MT with shared doesn't work and has no much sense 
 
         # x86, static
         build_run_example(compiler + '-s build_type=Debug -s arch=x86 -s compiler.runtime=MDd -o Poco:poco_static=True')
@@ -53,10 +53,10 @@ if __name__ == "__main__":
 
         # x86, shared
         build_run_example(compiler + '-s build_type=Debug -s arch=x86 -s compiler.runtime=MDd -o Poco:poco_static=False')
-        build_run_example(compiler + '-s build_type=Debug -s arch=x86 -s compiler.runtime=MTd -o Poco:poco_static=False')
+        # MT with shared doesn't work and has no much sense 
 
         build_run_example(compiler + '-s build_type=Release -s arch=x86 -s compiler.runtime=MD -o Poco:poco_static=False')
-        build_run_example(compiler + '-s build_type=Release -s arch=x86 -s compiler.runtime=MT -o Poco:poco_static=False')
+        # MT with shared doesn't work and has no much sense 
 
     else:  # Compiler and version not specified, please set it in your home/.conan/conan.conf (Valid for Macos and Linux)
         # x86_64 debug
