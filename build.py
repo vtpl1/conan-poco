@@ -5,7 +5,7 @@ import hashlib
 
 
 def test(arguments):
-    command = "conan test %s" % arguments
+    command = "/usr/bin/conan test %s" % arguments
     retcode = os.system(command)
     if retcode != 0:
         exit("Error while executing:\n\t %s" % command)

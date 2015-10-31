@@ -75,7 +75,7 @@ poco_unbundled=False
 
     def config(self):
         if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
-            self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
+            # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
             self.requires.add("OpenSSL/1.0.2d@lasote/stable", private=False)
             if self.options.poco_static == False:
                 # If don't if fails because of reallocation and ask for fPIC
