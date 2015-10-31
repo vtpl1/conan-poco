@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lasote/conan-poco.svg?branch=master)](https://travis-ci.org/lasote/conan-poco)
+
 # conan-poco
 
 [Conan.io](https://conan.io) package for [POCO](http://pocoproject.org/) library
