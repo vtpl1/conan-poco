@@ -11,7 +11,8 @@ def test(arguments):
         exit("Error while executing:\n\t %s" % command)
 
 if __name__ == "__main__":
-    os.system('conan export lasote/stable')
+    channel = "lasote/stable"
+    os.system('conan export %s' % channel)
 
     if platform.system() == "Windows":
         # x86_64, static
@@ -52,10 +53,11 @@ if __name__ == "__main__":
         test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=True')
         test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=False')
 
-        # x86 debug
-        test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=True')
-        test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=False')
+        if not "travis" in channel:
+	    # x86 debug
+            test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=True')
+            test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=False')
 
-        # x86 release
-        test('-s build_type=Release -s arch=x86 -o Poco:poco_static=True')
-        test('-s build_type=Release -s arch=x86 -o Poco:poco_static=False')
+            # x86 release
+            test('-s build_type=Release -s arch=x86 -o Poco:poco_static=True')
+            test('-s build_type=Release -s arch=x86 -o Poco:poco_static=False')
