@@ -49,7 +49,7 @@ if __name__ == "__main__":
         test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=True')
         test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=False')
 
-        if os.getenv("TRAVIS", False):   
+        if not os.getenv("TRAVIS", False):   
 	    # x86 debug
             test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=True')
             test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=False')
