@@ -1,18 +1,14 @@
-import os
-import shutil
-import platform
-import hashlib
-
-
-def test(arguments):
-    command = "/usr/bin/conan test %s" % arguments
-    retcode = os.system(command)
-    if retcode != 0:
-        exit("Error while executing:\n\t %s" % command)
+import os, sys, shutil, platform, hashlib
 
 if __name__ == "__main__":
-    channel = "lasote/stable"
-    os.system('conan export %s' % channel)
+    os.system('conan export lasote/stable')
+    
+    def test(settings):
+        argv =  " ".join(sys.argv[1:])
+        command = "conan test %s %s" % (settings, argv)
+        retcode = os.system(command)
+        if retcode != 0:
+            exit("Error while executing:\n\t %s" % command)
 
     if platform.system() == "Windows":
         # x86_64, static
@@ -53,7 +49,7 @@ if __name__ == "__main__":
         test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=True')
         test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=False')
 
-        if not "travis" in channel:
+        if os.getenv("TRAVIS", False):   
 	    # x86 debug
             test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=True')
             test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=False')
