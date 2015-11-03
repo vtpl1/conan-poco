@@ -1,4 +1,6 @@
-import os, sys, shutil, platform, hashlib
+import os
+import platform
+import sys
 
 if __name__ == "__main__":
     os.system('conan export lasote/stable')
