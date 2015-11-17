@@ -1,5 +1,5 @@
 from conans import ConanFile
-from conans.tools import download, unzip
+from conans.tools import download, unzip, replace_in_file
 import os
 import shutil
 from conans import CMake
@@ -10,7 +10,7 @@ class PocoConan(ConanFile):
     version = "1.6.1"
     url="http://github.com/lasote/conan-poco"
     exports = "CMakeLists.txt"
-    generators = "cmake"
+    generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
     options = {"poco_static": [True, False],
                "enable_xml": [True, False],
@@ -88,7 +88,9 @@ poco_unbundled=False
         cmake = CMake(self.settings)
         # Wrap original CMakeLists.txt for be able to include and call CONAN_BASIC_SETUP
         # It will allow us to set architecture flags, link with the requires etc
-
+        openssl_include_path = " ".join(self.deps_cpp_info["OpenSSL"].include_paths).replace("\\", "/")
+        openssl_plug = 'SET(OPENSSL_FOUND TRUE)\nSET(OPENSSL_INCLUDE_DIR "%s")' % openssl_include_path
+        replace_in_file("poco/CMakeListsOriginal.cmake", "find_package(OpenSSL)", openssl_plug)
         cmake_options = []
         for option_name in self.options.values.fields:
             activated = getattr(self.options, option_name)
