@@ -89,7 +89,8 @@ poco_unbundled=False
         # Wrap original CMakeLists.txt for be able to include and call CONAN_BASIC_SETUP
         # It will allow us to set architecture flags, link with the requires etc
         openssl_include_path = " ".join(self.deps_cpp_info["OpenSSL"].include_paths).replace("\\", "/")
-        openssl_plug = 'SET(OPENSSL_FOUND TRUE)\nSET(OPENSSL_INCLUDE_DIR "%s")' % openssl_include_path
+        openssl_libs = " ".join(['"%s"' % lib for lib in self.deps_cpp_info["OpenSSL"].libs])
+        openssl_plug = 'SET(OPENSSL_FOUND TRUE)\nSET(OPENSSL_INCLUDE_DIR "%s")\nSET(OPENSSL_LIBRARIES %s)' % (openssl_include_path, openssl_libs)
         replace_in_file("poco/CMakeListsOriginal.cmake", "find_package(OpenSSL)", openssl_plug)
         cmake_options = []
         for option_name in self.options.values.fields:
