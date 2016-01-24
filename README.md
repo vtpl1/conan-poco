@@ -32,7 +32,7 @@ If you handle multiple dependencies in your project is better to add a *conanfil
     Poco/1.6.1@lasote/stable
 
     [options]
-    Poco:poco_static=True # False
+    Poco:shared=True # False
     
     [generators]
     txt
