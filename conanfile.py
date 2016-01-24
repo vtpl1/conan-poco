@@ -96,7 +96,6 @@ poco_unbundled=False
                the_option += "ON" if activated else "OFF"
             cmake_options.append(the_option)
 
-        cmake_options.append("POCO_STATIC=")
         options_poco = " -D".join(cmake_options)
 
         self.run('cd poco && cmake . %s -D%s' % (cmake.command_line, options_poco))
