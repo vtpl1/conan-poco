@@ -77,12 +77,12 @@ poco_unbundled=False
         if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
             self.requires.add("OpenSSL/1.0.2e@lasote/stable", private=False)
-            if self.options.shared:
-                # If don't if fails because of reallocation and ask for fPIC
-                self.options["OpenSSL"].shared = True
         else:
             if "OpenSSL" in self.requires:
                 del self.requires["OpenSSL"]
+
+        if "OpenSSL" in self.requires:
+            self.options["OpenSSL"].shared = self.options.shared
 
     def build(self):
         cmake = CMake(self.settings)
