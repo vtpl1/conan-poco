@@ -2,12 +2,19 @@ from conans import ConanFile
 from conans import CMake
 import os
 
+############### CONFIGURE THESE VALUES ##################
+default_user = "lasote"
+default_channel = "testing"
+#########################################################
+
+channel = os.getenv("CONAN_CHANNEL", default_channel)
+username = os.getenv("CONAN_USERNAME", default_user)
 
 class DefaultNameConan(ConanFile):
     name = "DefaultName"
     version = "0.1"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "Poco/1.6.1@lasote/stable"
+    requires = "Poco/1.6.1@%s/%s" % (username, channel)
     generators = "cmake"
 
     def build(self):

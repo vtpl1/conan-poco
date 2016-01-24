@@ -12,7 +12,7 @@ class PocoConan(ConanFile):
     exports = "CMakeLists.txt"
     generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"poco_static": [True, False],
+    options = {"shared": [True, False],
                "enable_xml": [True, False],
                "enable_json": [True, False],
                "enable_mongodb": [True, False],
@@ -38,7 +38,7 @@ class PocoConan(ConanFile):
                "poco_unbundled": [True, False],
                }
     default_options = '''
-poco_static=True
+shared=False
 enable_xml=True
 enable_json=True
 enable_mongodb=True
@@ -76,8 +76,8 @@ poco_unbundled=False
     def config(self):
         if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
-            self.requires.add("OpenSSL/1.0.2d@lasote/stable", private=False)
-            if self.options.poco_static == False:
+            self.requires.add("OpenSSL/1.0.2e@lasote/stable", private=False)
+            if self.options.shared:
                 # If don't if fails because of reallocation and ask for fPIC
                 self.options["OpenSSL"].shared = True
         else:
@@ -155,7 +155,7 @@ poco_unbundled=False
         if self.settings.os == "Linux":
             self.cpp_info.libs.extend(["pthread", "dl", "rt"])
 
-        if self.options.poco_static:
+        if not self.options.shared:
             self.cpp_info.defines.extend(["POCO_STATIC=ON", "POCO_NO_AUTOMATIC_LIBS"])
             if self.settings.compiler == "Visual Studio":
                 self.cpp_info.libs.extend(["ws2_32", "Iphlpapi.lib"])

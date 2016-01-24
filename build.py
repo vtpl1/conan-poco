@@ -1,61 +1,38 @@
 import os
-import platform
+from conan.packager import ConanMultiPackager
 import sys
+import platform
+from copy import copy
 
 if __name__ == "__main__":
-    os.system('conan export lasote/stable')
-    
-    def test(settings):
-        argv =  " ".join(sys.argv[1:])
-        command = "conan test %s %s" % (settings, argv)
-        retcode = os.system(command)
-        if retcode != 0:
-            exit("Error while executing:\n\t %s" % command)
+    channel = os.getenv("CONAN_CHANNEL", "testing")
+    username = os.getenv("CONAN_USERNAME", "lasote")
+    current_page = os.getenv("CONAN_CURRENT_PAGE", "1")
+    total_pages = os.getenv("CONAN_TOTAL_PAGES", "1")
+    gcc_versions = os.getenv("CONAN_GCC_VERSIONS", None)
+    gcc_versions = gcc_versions.split(",") if gcc_versions else None
+    use_docker = os.getenv("CONAN_USE_DOCKER", False)
+    upload = os.getenv("CONAN_UPLOAD", False)
+    reference = os.getenv("CONAN_REFERENCE")
+    password = os.getenv("CONAN_PASSWORD")
+    travis = os.getenv("TRAVIS", False)
+    travis_branch = os.getenv("TRAVIS_BRANCH", None)
+    appveyor = os.getenv("APPVEYOR", False)
+    appveyor_branch = os.getenv("APPVEYOR_REPO_BRANCH", None)
 
-    if platform.system() == "Windows":
-        # x86_64, static
-        compiler = '-s compiler="Visual Studio" -s compiler.version=12 '
-        test(compiler + '-s build_type=Debug -s arch=x86_64 -s compiler.runtime=MDd -o Poco:poco_static=True')
-        test(compiler + '-s build_type=Debug -s arch=x86_64 -s compiler.runtime=MTd -o Poco:poco_static=True')
+    channel = "stable" if travis and travis_branch=="master" else channel
+    channel = "stable" if appveyor and appveyor_branch=="master" and not os.getenv("APPVEYOR_PULL_REQUEST_NUMBER") else channel
+    os.environ["CONAN_CHANNEL"] = channel # Override the environment value for test/conanfile.py file
 
-        test(compiler + '-s build_type=Release -s arch=x86_64 -s compiler.runtime=MD -o Poco:poco_static=True')
-        test(compiler + '-s build_type=Release -s arch=x86_64 -s compiler.runtime=MT -o Poco:poco_static=True')
+    args = " ".join(sys.argv[1:])
+    builder = ConanMultiPackager(args, username, channel)
+    builder.add_common_builds(shared_option_name="Poco:poco_static", visual_versions=[10, 12, 14])
+    print(builder.builds)
 
-        # x86_64, shared
-        test(compiler + '-s build_type=Debug -s arch=x86_64 -s compiler.runtime=MDd -o Poco:poco_static=False')
-        # MT with shared doesn't work and has no much sense 
-        
-        test(compiler + '-s build_type=Release -s arch=x86_64 -s compiler.runtime=MD -o Poco:poco_static=False')
-        # MT with shared doesn't work and has no much sense 
+    if use_docker:  
+        builder.docker_pack(current_page, total_pages, gcc_versions)
+    else:
+        builder.pack(current_page, total_pages)
 
-        # x86, static
-        test(compiler + '-s build_type=Debug -s arch=x86 -s compiler.runtime=MDd -o Poco:poco_static=True')
-        test(compiler + '-s build_type=Debug -s arch=x86 -s compiler.runtime=MTd -o Poco:poco_static=True')
-
-        test(compiler + '-s build_type=Release -s arch=x86 -s compiler.runtime=MD -o Poco:poco_static=True')
-        test(compiler + '-s build_type=Release -s arch=x86 -s compiler.runtime=MT -o Poco:poco_static=True')
-
-        # x86, shared
-        test(compiler + '-s build_type=Debug -s arch=x86 -s compiler.runtime=MDd -o Poco:poco_static=False')
-        # MT with shared doesn't work and has no much sense 
-
-        test(compiler + '-s build_type=Release -s arch=x86 -s compiler.runtime=MD -o Poco:poco_static=False')
-        # MT with shared doesn't work and has no much sense 
-
-    else:  # Compiler and version not specified, please set it in your home/.conan/conan.conf (Valid for Macos and Linux)
-        # x86_64 debug
-        test('-s build_type=Debug -s arch=x86_64 -o Poco:poco_static=True')
-        test('-s build_type=Debug -s arch=x86_64 -o Poco:poco_static=False')
-
-        # x86_64 release
-        test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=True')
-        test('-s build_type=Release -s arch=x86_64 -o Poco:poco_static=False')
-
-        if not os.getenv("TRAVIS", False):   
-	    # x86 debug
-            test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=True')
-            test('-s build_type=Debug -s arch=x86 -o Poco:poco_static=False')
-
-            # x86 release
-            test('-s build_type=Release -s arch=x86 -o Poco:poco_static=True')
-            test('-s build_type=Release -s arch=x86 -o Poco:poco_static=False')
+    if upload and reference and password:
+        builder.upload_packages(reference, password)
