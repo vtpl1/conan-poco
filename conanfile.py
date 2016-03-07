@@ -7,7 +7,7 @@ from conans import CMake
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.6.1"
+    version = "1.7.0"
     url="http://github.com/lasote/conan-poco"
     exports = "CMakeLists.txt"
     generators = "cmake", "txt"
@@ -65,10 +65,10 @@ poco_unbundled=False
 '''
 
     def source(self):
-        zip_name = "poco-1.6.1-release.zip"
-        download("https://github.com/pocoproject/poco/archive/poco-1.6.1-release.zip", zip_name)
+        zip_name = "poco-%s-release.zip" % self.version
+        download("https://github.com/pocoproject/poco/archive/%s" % zip_name, zip_name)
         unzip(zip_name)
-        shutil.move("poco-poco-1.6.1-release", "poco")
+        shutil.move("poco-poco-%s-release" % self.version, "poco")
         os.unlink(zip_name)
         shutil.move("poco/CMakeLists.txt", "poco/CMakeListsOriginal.cmake")
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
@@ -76,7 +76,7 @@ poco_unbundled=False
     def config(self):
         if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
-            self.requires.add("OpenSSL/1.0.2e@lasote/stable", private=False)
+            self.requires.add("OpenSSL/1.0.2g@lasote/stable", private=False)
             self.options["OpenSSL"].shared = self.options.shared
         else:
             if "OpenSSL" in self.requires:

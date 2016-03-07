@@ -6,7 +6,7 @@ environment:
     PYTHON_ARCH: "32"
     
     CONAN_UPLOAD: 1
-    CONAN_REFERENCE: "Poco/1.6.1"
+    CONAN_REFERENCE: "Poco/1.7.0"
     CONAN_USERNAME: "lasote"
     CONAN_CHANNEL: "ci"
     CONAN_TOTAL_PAGES: 30
