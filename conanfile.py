@@ -7,7 +7,7 @@ from conans import CMake
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.7.0"
+    version = "1.7.1"
     url="http://github.com/lasote/conan-poco"
     exports = "CMakeLists.txt"
     generators = "cmake", "txt"
@@ -97,6 +97,12 @@ poco_unbundled=False
             cmake_options.append(the_option)
 
         options_poco = " -D".join(cmake_options)
+        
+        if self.settings.os == "Windows":
+            if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
+                options_poco += " -DPOCO_MT=ON"
+            else:
+                options_poco += " -DPOCO_MT=OFF"
 
         self.run('cd poco && cmake . %s -D%s' % (cmake.command_line, options_poco))
         self.run("cd poco && cmake --build . %s" % cmake.build_config)
@@ -144,9 +150,17 @@ poco_unbundled=False
 
         self.cpp_info.libs.append("PocoFoundation")
 
+        if self.settings.os == "Windows": 
+            if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
+                self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
+            else:
+                self.cpp_info.libs = ["%smd" % lib for lib in self.cpp_info.libs]
+
         # Debug library names has "d" at the final
         if self.settings.build_type == "Debug":
             self.cpp_info.libs = ["%sd" % lib for lib in self.cpp_info.libs]
+            
+                
 
         # in linux we need to link also with these libs
         if self.settings.os == "Linux":
