@@ -150,7 +150,7 @@ poco_unbundled=False
 
         self.cpp_info.libs.append("PocoFoundation")
 
-        if self.settings.os == "Windows": 
+        if self.settings.os == "Windows" and self.options.shared == False: 
             if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
                 self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
             else:
