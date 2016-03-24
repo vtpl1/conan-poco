@@ -78,6 +78,9 @@ poco_unbundled=False
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
             self.requires.add("OpenSSL/1.0.2g@lasote/stable", private=False)
             self.options["OpenSSL"].shared = self.options.shared
+            if self.options.shared and self.settings.compiler == "apple-clang" \
+                and self.settings.compiler.version == "7.3":
+                self.options["OpenSSL"].shared = False
         else:
             if "OpenSSL" in self.requires:
                 del self.requires["OpenSSL"]
