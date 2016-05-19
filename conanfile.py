@@ -45,8 +45,8 @@ enable_mongodb=True
 enable_pdf=False
 enable_util=True
 enable_net=True
-enable_netssl=False
-enable_netssl_win=False
+enable_netssl=True
+enable_netssl_win=True
 enable_crypto=True
 enable_data=True
 enable_data_sqlite=True
@@ -119,7 +119,6 @@ poco_unbundled=False
         else:
             packages.append("NetSSL_OpenSSL")
 
-        self.output.debug(packages)
         for header in packages:
             self.copy(pattern="*.h", dst="include", src="poco/%s/include" % header)
 
@@ -135,9 +134,7 @@ poco_unbundled=False
         """ Define the required info that the consumers/users of this package will have
         to add to their projects
         """
-        libs = [("enable_util", "PocoUtil"),
-                ("enable_xml", "PocoXML"),
-                ("enable_json", "PocoJSON"),
+        libs = [("enable_util", "PocoUtil"),               
                 ("enable_mongodb", "PocoMongoDB"),
                 ("enable_pdf", "PocoPDF"),
                 ("enable_net", "PocoNet"),
@@ -149,10 +146,17 @@ poco_unbundled=False
                 ("enable_data_mysql", "PocoDataMySQL"),
                 ("enable_data_odbc", "PocoDataODBC"),
                 ("enable_sevenzip", "PocoSevenZip"),
+                ("enable_util", "PocoUtil"),
                 ("enable_zip", "PocoZip"),
-                ("enable_apacheconnector", "PocoApacheConnector")]
+                ("enable_apacheconnector", "PocoApacheConnector"),
+                ("enable_xml", "PocoXML"),
+                ("enable_json", "PocoJSON")]
         for flag, lib in libs:
             if getattr(self.options, flag):
+                if self.settings.os == "Windows" and lib == "PocoNetSSL":
+                    continue
+                if self.settings.os != "Windows" and lib == "PocoNetSSL_Win":
+                    continue
                 self.cpp_info.libs.append(lib)
 
         self.cpp_info.libs.append("PocoFoundation")
