@@ -45,8 +45,8 @@ enable_mongodb=True
 enable_pdf=False
 enable_util=True
 enable_net=True
-enable_netssl=False
-enable_netssl_win=False
+enable_netssl=True
+enable_netssl_win=True
 enable_crypto=True
 enable_data=True
 enable_data_sqlite=True
@@ -104,10 +104,15 @@ poco_unbundled=False
     def package(self):
         """ Copy required headers, libs and shared libs from the build folder to the package
         """
+        packages = ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
+                    "Foundation", "JSON", "MongoDB", "Net", "Util", "XML", "Zip"]
         # Typically includes we want to keep_path=True (default)
-        for header in ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
-                       "Foundation", "JSON", "MongoDB", "Net", "NetSSL_OpenSSL", "Util",
-                       "XML", "Zip", "NetSSL_Win"]:
+        if self.settings.os == "Windows":
+            packages.append("NetSSL_Win")
+        else:
+            packages.append("NetSSL_OpenSSL")
+
+        for header in packages:
             self.copy(pattern="*.h", dst="include", src="poco/%s/include" % header)
 
         # But for libs and dlls, we want to avoid intermediate folders
@@ -122,10 +127,7 @@ poco_unbundled=False
         """ Define the required info that the consumers/users of this package will have
         to add to their projects
         """
-        libs = [("enable_util", "PocoUtil"),
-                ("enable_xml", "PocoXML"),
-                ("enable_json", "PocoJSON"),
-                ("enable_mongodb", "PocoMongoDB"),
+        libs = [("enable_mongodb", "PocoMongoDB"),
                 ("enable_pdf", "PocoPDF"),
                 ("enable_net", "PocoNet"),
                 ("enable_netssl", "PocoNetSSL"),
@@ -136,10 +138,17 @@ poco_unbundled=False
                 ("enable_data_mysql", "PocoDataMySQL"),
                 ("enable_data_odbc", "PocoDataODBC"),
                 ("enable_sevenzip", "PocoSevenZip"),
+                ("enable_util", "PocoUtil"),
                 ("enable_zip", "PocoZip"),
-                ("enable_apacheconnector", "PocoApacheConnector")]
+                ("enable_apacheconnector", "PocoApacheConnector"),
+                ("enable_xml", "PocoXML"),
+                ("enable_json", "PocoJSON")]
         for flag, lib in libs:
             if getattr(self.options, flag):
+                if lib == "PocoNetSSL_Win" and self.settings.os != "Windows":
+                    continue
+                if lib == "PocoNet" and self.settings.os == "Windows":
+                    continue
                 self.cpp_info.libs.append(lib)
 
         self.cpp_info.libs.append("PocoFoundation")
