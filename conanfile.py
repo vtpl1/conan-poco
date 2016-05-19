@@ -142,7 +142,7 @@ poco_unbundled=False
                 ("enable_pdf", "PocoPDF"),
                 ("enable_net", "PocoNet"),
                 ("enable_netssl", "PocoNetSSL"),
-                ("enable_netssl_win", "PocoNetSSL_Win"),
+                ("enable_netssl_win", "PocoNetSSL"),
                 ("enable_crypto", "PocoCrypto"),
                 ("enable_data", "PocoData"),
                 ("enable_data_sqlite", "PocoDataSQLite"),
@@ -156,9 +156,9 @@ poco_unbundled=False
                 ("enable_json", "PocoJSON")]
         for flag, lib in libs:
             if getattr(self.options, flag):
-                if self.settings.os == "Windows" and lib == "PocoNetSSL":
+                if self.settings.os == "Windows" and flag == "enable_netssl":
                     continue
-                if self.settings.os != "Windows" and lib == "PocoNetSSL_Win":
+                if self.settings.os != "Windows" and flag == "enable_netssl_win":
                     continue
                 self.cpp_info.libs.append(lib)
 
