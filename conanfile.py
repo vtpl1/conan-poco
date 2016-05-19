@@ -111,9 +111,16 @@ poco_unbundled=False
         """ Copy required headers, libs and shared libs from the build folder to the package
         """
         # Typically includes we want to keep_path=True (default)
-        for header in ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
-                       "Foundation", "JSON", "MongoDB", "Net", "NetSSL_OpenSSL", "Util",
-                       "XML", "Zip", "NetSSL_Win"]:
+        packages = ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
+                    "Foundation", "JSON", "MongoDB", "Net", "Util",
+                    "XML", "Zip"]
+        if self.settings.os == "Windows":
+            packages.append("NetSSL_Win")
+        else:
+            packages.append("NetSSL_OpenSSL")
+
+        self.output.debug(packages)
+        for header in packages:
             self.copy(pattern="*.h", dst="include", src="poco/%s/include" % header)
 
         # But for libs and dlls, we want to avoid intermediate folders
