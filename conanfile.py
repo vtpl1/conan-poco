@@ -76,7 +76,7 @@ poco_unbundled=False
     def config(self):
         if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
-            self.requires.add("OpenSSL/1.0.2g@lasote/stable", private=False)
+            self.requires.add("OpenSSL/1.0.2h@lasote/stable", private=False)
             self.options["OpenSSL"].shared = self.options.shared
             if self.options.shared and self.settings.compiler == "apple-clang" \
                 and self.settings.compiler.version == "7.3":
@@ -84,6 +84,12 @@ poco_unbundled=False
         else:
             if "OpenSSL" in self.requires:
                 del self.requires["OpenSSL"]
+                
+        if self.options.enable_data_mysql:
+            self.requires.add("MySQLClient/6.1.6@hklabbers/stable")
+        else:
+            if "MySQLClient" in self.requires:
+                del self.requires["MySQLClient"]
             
     def build(self):
         cmake = CMake(self.settings)
