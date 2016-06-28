@@ -74,7 +74,7 @@ poco_unbundled=False
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
 
     def config(self):
-        if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
+        if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
             self.requires.add("OpenSSL/1.0.2g@lasote/stable", private=False)
             self.options["OpenSSL"].shared = self.options.shared
