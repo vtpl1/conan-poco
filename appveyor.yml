@@ -9,7 +9,7 @@ environment:
     CONAN_REFERENCE: "Poco/1.7.3"
     CONAN_USERNAME: "lasote"
     CONAN_CHANNEL: "ci"
-    CONAN_TOTAL_PAGES: 30
+    CONAN_TOTAL_PAGES: 15
     
     matrix:
         - CONAN_CURRENT_PAGE: 1
@@ -27,20 +27,6 @@ environment:
         - CONAN_CURRENT_PAGE: 13
         - CONAN_CURRENT_PAGE: 14
         - CONAN_CURRENT_PAGE: 15
-        - CONAN_CURRENT_PAGE: 16
-        - CONAN_CURRENT_PAGE: 17
-        - CONAN_CURRENT_PAGE: 18
-        - CONAN_CURRENT_PAGE: 19
-        - CONAN_CURRENT_PAGE: 21
-        - CONAN_CURRENT_PAGE: 22
-        - CONAN_CURRENT_PAGE: 23
-        - CONAN_CURRENT_PAGE: 24
-        - CONAN_CURRENT_PAGE: 25
-        - CONAN_CURRENT_PAGE: 26
-        - CONAN_CURRENT_PAGE: 27
-        - CONAN_CURRENT_PAGE: 28
-        - CONAN_CURRENT_PAGE: 29
-        - CONAN_CURRENT_PAGE: 30
 
 init:
   - "ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%"
