@@ -74,7 +74,7 @@ poco_unbundled=False
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
 
     def config(self):
-        if self.options.enable_netssl or self.options.enable_crypto or self.options.force_openssl:
+        if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
             self.requires.add("OpenSSL/1.0.2h@lasote/stable", private=False)
             self.options["OpenSSL"].shared = self.options.shared
@@ -112,8 +112,9 @@ poco_unbundled=False
                 options_poco += " -DPOCO_MT=ON"
             else:
                 options_poco += " -DPOCO_MT=OFF"
-
-        self.run('cd poco && cmake . %s -D%s' % (cmake.command_line, options_poco))
+        conf_command = 'cd poco && cmake . %s -D%s' % (cmake.command_line, options_poco)
+        self.output.warn(conf_command)
+        self.run(conf_command)
         self.run("cd poco && cmake --build . %s" % cmake.build_config)
 
     def package(self):
@@ -148,7 +149,7 @@ poco_unbundled=False
                 ("enable_pdf", "PocoPDF"),
                 ("enable_net", "PocoNet"),
                 ("enable_netssl", "PocoNetSSL"),
-                ("enable_netssl_win", "PocoNetSSL"),
+                ("enable_netssl_win", "PocoNetSSLWin"),
                 ("enable_crypto", "PocoCrypto"),
                 ("enable_data", "PocoData"),
                 ("enable_data_sqlite", "PocoDataSQLite"),
@@ -179,8 +180,6 @@ poco_unbundled=False
         # Debug library names has "d" at the final
         if self.settings.build_type == "Debug":
             self.cpp_info.libs = ["%sd" % lib for lib in self.cpp_info.libs]
-            
-                
 
         # in linux we need to link also with these libs
         if self.settings.os == "Linux":
