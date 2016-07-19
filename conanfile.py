@@ -92,9 +92,7 @@ cxx_14=False
         else:
             if "MySQLClient" in self.requires:
                 del self.requires["MySQLClient"]
-                
-        self.options.cxx_14 = (self.settings.compiler == "clang" and self.settings.build_type == "Debug")
-            
+
     def build(self):
         cmake = CMake(self.settings)
         # Wrap original CMakeLists.txt for be able to include and call CONAN_BASIC_SETUP
@@ -109,9 +107,6 @@ cxx_14=False
                the_option += "ON" if activated else "OFF"
             cmake_options.append(the_option)
             
-        if self.options.cxx_14:
-            cmake_options.append("ACTIVATE_CXX14=ON")
-
         options_poco = " -D".join(cmake_options)
         
         if self.settings.os == "Windows":
