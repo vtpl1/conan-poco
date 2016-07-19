@@ -36,6 +36,7 @@ class PocoConan(ConanFile):
                "force_openssl": [True, False], #  "Force usage of OpenSSL even under windows"
                "enable_tests": [True, False],
                "poco_unbundled": [True, False],
+               "cxx_14": [True, False]
                }
     default_options = '''
 shared=False
@@ -62,6 +63,7 @@ enable_pagecompiler_file2page=False
 force_openssl=True
 enable_tests=False
 poco_unbundled=False
+cxx_14=False
 '''
 
     def source(self):
@@ -90,6 +92,8 @@ poco_unbundled=False
         else:
             if "MySQLClient" in self.requires:
                 del self.requires["MySQLClient"]
+                
+        self.options.cxx_14 = (self.settings.compiler == "clang" and self.settings.build_type == "Debug")
             
     def build(self):
         cmake = CMake(self.settings)
@@ -104,6 +108,9 @@ poco_unbundled=False
             else:
                the_option += "ON" if activated else "OFF"
             cmake_options.append(the_option)
+            
+        if self.options.cxx_14:
+            cmake_options.append("ACTIVATE_CXX14=ON")
 
         options_poco = " -D".join(cmake_options)
         
