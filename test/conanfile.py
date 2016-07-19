@@ -28,3 +28,4 @@ class DefaultNameConan(ConanFile):
 
     def test(self):
         self.run("cd bin && .%ssample" % (os.sep))
+        self.run("cd bin && .%ssocket" % (os.sep))
