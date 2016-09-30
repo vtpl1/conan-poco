@@ -7,7 +7,7 @@ from conans import CMake
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.7.3"
+    version = "1.7.5"
     url="http://github.com/lasote/conan-poco"
     exports = "CMakeLists.txt"
     generators = "cmake", "txt"
@@ -78,7 +78,7 @@ cxx_14=False
     def config(self):
         if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
             # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
-            self.requires.add("OpenSSL/1.0.2h@lasote/stable", private=False)
+            self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
             self.options["OpenSSL"].shared = self.options.shared
             if self.options.shared and self.settings.compiler == "apple-clang" \
                 and self.settings.compiler.version == "7.3":
@@ -173,7 +173,7 @@ cxx_14=False
 
         self.cpp_info.libs.append("PocoFoundation")
 
-        if self.settings.os == "Windows" and self.options.shared == False: 
+        if self.settings.compiler == "Visual Studio" and self.options.shared == False: 
             if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
                 self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
             else:
