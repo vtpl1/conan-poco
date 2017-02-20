@@ -157,7 +157,6 @@ cxx_14=False
                 ("enable_data_mysql", "PocoDataMySQL"),
                 ("enable_data_odbc", "PocoDataODBC"),
                 ("enable_sevenzip", "PocoSevenZip"),
-                ("enable_util", "PocoUtil"),
                 ("enable_zip", "PocoZip"),
                 ("enable_apacheconnector", "PocoApacheConnector"),
                 ("enable_xml", "PocoXML"),
