@@ -150,25 +150,29 @@ cxx_14=False
                 ("enable_apacheconnector", "PocoApacheConnector"),
                 ("enable_xml", "PocoXML"),
                 ("enable_json", "PocoJSON")]
+        
+        suffix = str(self.settings.compiler.runtime).lower()  \
+                 if self.settings.compiler == "Visual Studio" \
+                 else ("d" if self.settings.build_type=="Debug" else "")
         for flag, lib in libs:
             if getattr(self.options, flag):
                 if self.settings.os == "Windows" and flag == "enable_netssl":
                     continue
                 if self.settings.os != "Windows" and flag == "enable_netssl_win":
                     continue
-                self.cpp_info.libs.append(lib)
+                self.cpp_info.libs.append("%s%s" % (lib, suffix))
 
-        self.cpp_info.libs.append("PocoFoundation")
+        self.cpp_info.libs.append("PocoFoundation%s" % suffix)
 
-        if self.settings.compiler == "Visual Studio" and self.options.shared is False:
-            if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
-                self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
-            else:
-                self.cpp_info.libs = ["%smd" % lib for lib in self.cpp_info.libs]
-
-        # Debug library names has "d" at the final
-        if self.settings.build_type == "Debug":
-            self.cpp_info.libs = ["%sd" % lib for lib in self.cpp_info.libs]
+#         if self.settings.compiler == "Visual Studio" and self.options.shared is False:
+#             if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
+#                 self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
+#             else:
+#                 self.cpp_info.libs = ["%smd" % lib for lib in self.cpp_info.libs]
+# 
+#         # Debug library names has "d" at the final
+#         if self.settings.build_type == "Debug":
+#             self.cpp_info.libs = ["%sd" % lib for lib in self.cpp_info.libs]
 
         # in linux we need to link also with these libs
         if self.settings.os == "Linux":
