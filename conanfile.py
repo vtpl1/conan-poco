@@ -92,6 +92,14 @@ cxx_14=False
             raise Exception("MySQL not supported yet, open an issue here please: %s" % self.url)
 
     def build(self):
+        if self.settings.compiler == "Visual Studio" and self.options.shared:
+            self.output.warn("Adding ws2_32 dependency...")
+            replace = 'Net Util Foundation Crypt32.lib'
+            tools.replace_in_file("poco/NetSSL_Win/CMakeLists.txt", replace, replace + " ws2_32 ")
+            
+            replace = 'Foundation ${OPENSSL_LIBRARIES}'
+            tools.replace_in_file("poco/Crypto/CMakeLists.txt", replace, replace + " ws2_32 Crypt32.lib")
+        
         cmake = CMake(self, parallel=None)  # Parallel crashes building
         for option_name in self.options.values.fields:
             activated = getattr(self.options, option_name)
@@ -152,7 +160,7 @@ cxx_14=False
                 ("enable_json", "PocoJSON")]
         
         suffix = str(self.settings.compiler.runtime).lower()  \
-                 if self.settings.compiler == "Visual Studio" \
+                 if self.settings.compiler == "Visual Studio" and not self.options.shared \
                  else ("d" if self.settings.build_type=="Debug" else "")
         for flag, lib in libs:
             if getattr(self.options, flag):
@@ -164,16 +172,6 @@ cxx_14=False
 
         self.cpp_info.libs.append("PocoFoundation%s" % suffix)
 
-#         if self.settings.compiler == "Visual Studio" and self.options.shared is False:
-#             if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
-#                 self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
-#             else:
-#                 self.cpp_info.libs = ["%smd" % lib for lib in self.cpp_info.libs]
-# 
-#         # Debug library names has "d" at the final
-#         if self.settings.build_type == "Debug":
-#             self.cpp_info.libs = ["%sd" % lib for lib in self.cpp_info.libs]
-
         # in linux we need to link also with these libs
         if self.settings.os == "Linux":
             self.cpp_info.libs.extend(["pthread", "dl", "rt"])
@@ -181,4 +179,4 @@ cxx_14=False
         if not self.options.shared:
             self.cpp_info.defines.extend(["POCO_STATIC=ON", "POCO_NO_AUTOMATIC_LIBS"])
             if self.settings.compiler == "Visual Studio":
-                self.cpp_info.libs.extend(["ws2_32", "Iphlpapi.lib"])
+                self.cpp_info.libs.extend(["ws2_32", "Iphlpapi.lib", "Crypt32.lib"])
