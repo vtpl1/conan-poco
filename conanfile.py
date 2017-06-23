@@ -1,16 +1,20 @@
-from conans import ConanFile
-from conans.tools import download, unzip, replace_in_file
 import os
 import shutil
+
 from conans import CMake
+from conans import ConanFile, tools
+
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.7.5"
-    url="http://github.com/lasote/conan-poco"
-    exports = "CMakeLists.txt"
+    version = "1.7.8p3"
+    url = "http://github.com/lasote/conan-poco"
+    exports_sources = "CMakeLists.txt"
     generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
+    license = "The Boost Software License 1.0"
+    description = "Modern, powerful open source C++ class libraries for building network- and internet-based " \
+                  "applications that run on desktop, server, mobile and embedded systems."
     options = {"shared": [True, False],
                "enable_xml": [True, False],
                "enable_json": [True, False],
@@ -32,8 +36,9 @@ class PocoConan(ConanFile):
                "enable_pocodoc": [True, False],
                "enable_pagecompiler": [True, False],
                "enable_pagecompiler_file2page": [True, False],
-               "force_openssl": [True, False], #  "Force usage of OpenSSL even under windows"
+               "force_openssl": [True, False],  # "Force usage of OpenSSL even under windows"
                "enable_tests": [True, False],
+               #"enable_samples": [True, False],
                "poco_unbundled": [True, False],
                "cxx_14": [True, False]
                }
@@ -67,60 +72,44 @@ cxx_14=False
 
     def source(self):
         zip_name = "poco-%s-release.zip" % self.version
-        download("https://github.com/pocoproject/poco/archive/%s" % zip_name, zip_name)
-        unzip(zip_name)
+        tools.download("https://github.com/pocoproject/poco/archive/%s" % zip_name, zip_name)
+        tools.unzip(zip_name)
         shutil.move("poco-poco-%s-release" % self.version, "poco")
         os.unlink(zip_name)
         shutil.move("poco/CMakeLists.txt", "poco/CMakeListsOriginal.cmake")
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
 
-    def config(self):
+    def configure(self):
+        if self.options.enable_apacheconnector:
+            raise Exception("Apache connector not supported: https://github.com/pocoproject/poco/issues/1764")
+
+    def requirements(self):
         if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
-            # self.output.warn("ENABLED OPENSSL DEPENDENCY!!")
-            self.requires.add("OpenSSL/1.0.2i@lasote/stable", private=False)
-            self.options["OpenSSL"].shared = self.options.shared
-            if self.options.shared and self.settings.compiler == "apple-clang" \
-                and self.settings.compiler.version == "7.3":
-                self.options["OpenSSL"].shared = False
-        else:
-            if "OpenSSL" in self.requires:
-                del self.requires["OpenSSL"]
-                
+            self.requires.add("OpenSSL/1.0.2l@conan/stable", private=False)
+
         if self.options.enable_data_mysql:
-            self.requires.add("MySQLClient/6.1.6@hklabbers/stable")
-        else:
-            if "MySQLClient" in self.requires:
-                del self.requires["MySQLClient"]
+            # self.requires.add("MySQLClient/6.1.6@hklabbers/stable")
+            raise Exception("MySQL not supported yet, open an issue here please: %s" % self.url)
 
     def build(self):
-        cmake = CMake(self.settings)
-        # Wrap original CMakeLists.txt for be able to include and call CONAN_BASIC_SETUP
-        # It will allow us to set architecture flags, link with the requires etc
-        cmake_options = []
+        cmake = CMake(self, parallel=None)  # Parallel crashes building
         for option_name in self.options.values.fields:
             activated = getattr(self.options, option_name)
-            the_option = "%s=" % option_name.upper()
             if option_name == "shared":
-               the_option = "POCO_STATIC=OFF" if activated else "POCO_STATIC=ON"
+                cmake.definitions["POCO_STATIC"] = "OFF" if activated else "ON"
             else:
-               the_option += "ON" if activated else "OFF"
-            cmake_options.append(the_option)
-            
-        options_poco = " -D".join(cmake_options)
-        
-        if self.settings.os == "Windows":
-            if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
-                options_poco += " -DPOCO_MT=ON"
-            else:
-                options_poco += " -DPOCO_MT=OFF"
-        conf_command = 'cd poco && cmake . %s -D%s' % (cmake.command_line, options_poco)
-        self.output.warn(conf_command)
-        self.run(conf_command)
-        self.run("cd poco && cmake --build . %s" % cmake.build_config)
+                cmake.definitions[option_name.upper()] = "ON" if activated else "OFF"
+
+        if self.settings.os == "Windows":  # MT or MTd
+            cmake.definitions["POCO_MT"] = "ON" if "MT" in str(self.settings.compiler.runtime) else "OFF"
+        self.output.info(cmake.definitions)
+        os.mkdir("build")
+        cmake.configure(source_dir="../poco", build_dir="build")
+        cmake.build()
 
     def package(self):
-        """ Copy required headers, libs and shared libs from the build folder to the package
-        """
+        # Copy the license files
+        self.copy("poco/LICENSE", dst=".", keep_path=False)
         # Typically includes we want to keep_path=True (default)
         packages = ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
                     "Foundation", "JSON", "MongoDB", "Net", "Util",
@@ -134,12 +123,12 @@ cxx_14=False
             self.copy(pattern="*.h", dst="include", src="poco/%s/include" % header)
 
         # But for libs and dlls, we want to avoid intermediate folders
-        self.copy(pattern="*.lib", dst="lib", src="poco/lib", keep_path=False)
-        self.copy(pattern="*.a",   dst="lib", src="poco/lib", keep_path=False)
-        self.copy(pattern="*.dll", dst="bin", src="poco/bin", keep_path=False)
+        self.copy(pattern="*.lib", dst="lib", src="build/lib", keep_path=False)
+        self.copy(pattern="*.a",   dst="lib", src="build/lib", keep_path=False)
+        self.copy(pattern="*.dll", dst="bin", src="build/bin", keep_path=False)
         # in linux shared libs are in lib, not bin
-        self.copy(pattern="*.so*", dst="lib", src="poco/lib", keep_path=False)
-        self.copy(pattern="*.dylib", dst="lib", src="poco/lib", keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", src="build/lib", keep_path=False)
+        self.copy(pattern="*.dylib", dst="lib", src="build/lib", keep_path=False)
 
     def package_info(self):
         """ Define the required info that the consumers/users of this package will have
@@ -171,7 +160,7 @@ cxx_14=False
 
         self.cpp_info.libs.append("PocoFoundation")
 
-        if self.settings.compiler == "Visual Studio" and self.options.shared == False: 
+        if self.settings.compiler == "Visual Studio" and self.options.shared is False:
             if self.settings.compiler.runtime == "MT" or self.settings.compiler.runtime == "MTd":
                 self.cpp_info.libs = ["%smt" % lib for lib in self.cpp_info.libs]
             else:
