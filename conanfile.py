@@ -135,7 +135,7 @@ cxx_14=False
         self.copy(pattern="*.a",   dst="lib", src="build/lib", keep_path=False)
         self.copy(pattern="*.dll", dst="bin", src="build/bin", keep_path=False)
         # in linux shared libs are in lib, not bin
-        self.copy(pattern="*.so*", dst="lib", src="build/lib", keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", src="build/lib", keep_path=False, symlinks=True)
         self.copy(pattern="*.dylib", dst="lib", src="build/lib", keep_path=False)
 
     def package_info(self):
