@@ -108,7 +108,7 @@ cxx_14=False
             else:
                 cmake.definitions[option_name.upper()] = "ON" if activated else "OFF"
 
-        if self.settings.os == "Windows":  # MT or MTd
+        if self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":  # MT or MTd
             cmake.definitions["POCO_MT"] = "ON" if "MT" in str(self.settings.compiler.runtime) else "OFF"
         self.output.info(cmake.definitions)
         os.mkdir("build")
