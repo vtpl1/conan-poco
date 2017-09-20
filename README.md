@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/lasote/conan-poco.svg?branch=master)](https://travis-ci.org/lasote/conan-poco)
+[![Build Status](https://travis-ci.org/pocoproject/conan-poco.svg?branch=master)](https://travis-ci.org/pocoproject/conan-poco)
 
 # conan-poco
 
 [Conan.io](https://conan.io) package for [POCO](http://pocoproject.org/) library
 
-The packages generated with this **conanfile** can be found in [conan.io](https://conan.io/source/Poco/1.7.9/lasote/stable).
+The packages generated with this **conanfile** can be found on [bintray](https://bintray.com/pocoproject/conan/Poco%3Apocoproject).
 
 ## Build packages
 
@@ -16,20 +16,20 @@ If your are in Windows you should run it from a VisualStudio console in order to
 
 ## Upload packages to server
 
-    $ conan upload Poco/1.7.0@lasote/stable --all
+    $ conan upload Poco/1.7.9@lasote/stable --all
 
 ## Reuse the packages
 
 ### Basic setup
 
-    $ conan install Poco/1.7.0@lasote/stable
+    $ conan install Poco/1.7.9@lasote/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    Poco/1.7.0@lasote/stable
+    Poco/1.7.9@lasote/stable
 
     [options]
     Poco:shared=True # False
