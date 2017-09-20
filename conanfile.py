@@ -7,7 +7,7 @@ from conans import ConanFile, tools
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.7.8p3"
+    version = "1.7.9"
     url = "http://github.com/lasote/conan-poco"
     exports_sources = "CMakeLists.txt"
     generators = "cmake", "txt"
@@ -96,10 +96,10 @@ cxx_14=False
             self.output.warn("Adding ws2_32 dependency...")
             replace = 'Net Util Foundation Crypt32.lib'
             tools.replace_in_file("poco/NetSSL_Win/CMakeLists.txt", replace, replace + " ws2_32 ")
-            
+
             replace = 'Foundation ${OPENSSL_LIBRARIES}'
             tools.replace_in_file("poco/Crypto/CMakeLists.txt", replace, replace + " ws2_32 Crypt32.lib")
-        
+
         cmake = CMake(self, parallel=None)  # Parallel crashes building
         for option_name in self.options.values.fields:
             activated = getattr(self.options, option_name)
@@ -142,7 +142,7 @@ cxx_14=False
         """ Define the required info that the consumers/users of this package will have
         to add to their projects
         """
-        libs = [("enable_util", "PocoUtil"),               
+        libs = [("enable_util", "PocoUtil"),
                 ("enable_mongodb", "PocoMongoDB"),
                 ("enable_pdf", "PocoPDF"),
                 ("enable_net", "PocoNet"),
@@ -158,7 +158,7 @@ cxx_14=False
                 ("enable_apacheconnector", "PocoApacheConnector"),
                 ("enable_xml", "PocoXML"),
                 ("enable_json", "PocoJSON")]
-        
+
         suffix = str(self.settings.compiler.runtime).lower()  \
                  if self.settings.compiler == "Visual Studio" and not self.options.shared \
                  else ("d" if self.settings.build_type=="Debug" else "")
