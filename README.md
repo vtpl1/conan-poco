@@ -1,19 +1,17 @@
 Conan Packages for POCO C++ Libraries
 =====================================
 
-Build Status
-------------
-
-- Travis: [![Travis Build Status](https://travis-ci.org/pocoproject/conan-poco.svg?branch=master)](https://travis-ci.org/pocoproject/conan-poco)
-- AppVeyor: [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/swn6l4rxpsgn8arg?svg=true)](https://ci.appveyor.com/project/obiltschnig/conan-poco)
-
-# conan-poco
-
 [Conan.io](https://conan.io) package for [POCO](http://pocoproject.org/) library
 
 The packages generated with this **conanfile** can be found in [conan.io](https://conan.io/source/Poco/1.7.9/pocoproject/stable).
 
-## Build packages
+## Build Status
+
+- Travis: [![Travis Build Status](https://travis-ci.org/pocoproject/conan-poco.svg?branch=master)](https://travis-ci.org/pocoproject/conan-poco)
+- AppVeyor: [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/swn6l4rxpsgn8arg?svg=true)](https://ci.appveyor.com/project/obiltschnig/conan-poco)
+
+
+## Build Packages
 
 Download conan client from [Conan.io](https://conan.io) and run:
 
@@ -21,17 +19,17 @@ Download conan client from [Conan.io](https://conan.io) and run:
 
 If your are in Windows you should run it from a VisualStudio console in order to get "mc.exe" in path.
 
-## Upload packages to server
+## Upload Packages to Server
 
     $ conan upload Poco/1.7.9@pocoproject/stable --all
 
-## Reuse the packages
+## Reuse the Packages
 
-### Basic setup
+### Basic Setup
 
     $ conan install Poco/1.7.9@pocoproject/stable
 
-### Project setup
+### Project Setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
