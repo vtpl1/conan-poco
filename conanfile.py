@@ -7,8 +7,8 @@ from conans import ConanFile, tools
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.7.9"
-    url = "http://github.com/lasote/conan-poco"
+    version = "1.7.9p1"
+    url = "http://github.com/pocoproject/conan-poco"
     exports_sources = "CMakeLists.txt"
     generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
