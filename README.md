@@ -43,7 +43,7 @@ If you handle multiple dependencies in your project is better to add a *conanfil
     txt
     cmake
 
-Complete the installation of requirements for your project running:</small></span>
+Complete the installation of requirements for your project running:
 
     conan install .
 
