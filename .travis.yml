@@ -1,9 +1,9 @@
 
 env:
    global:
-     - CONAN_REFERENCE: "Poco/1.7.9"
+     - CONAN_REFERENCE: "Poco/1.7.9p1"
      - CONAN_USERNAME: "pocoproject"
-     - CONAN_LOGIN_USERNAME: "lasote"
+     - CONAN_LOGIN_USERNAME: "obiltschnig"
      - CONAN_CHANNEL: "testing"
      - CONAN_UPLOAD: "https://api.bintray.com/conan/pocoproject/conan"
      - CONAN_STABLE_BRANCH_PATTERN: "release/*"
