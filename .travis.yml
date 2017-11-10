@@ -1,7 +1,7 @@
 
 env:
    global:
-     - CONAN_REFERENCE: "Poco/1.7.9p2"
+     - CONAN_REFERENCE: "Poco/1.8.0"
      - CONAN_USERNAME: "pocoproject"
      - CONAN_LOGIN_USERNAME: "obiltschnig"
      - CONAN_CHANNEL: "testing"

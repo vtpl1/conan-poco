@@ -7,7 +7,7 @@ from conans import ConanFile, tools
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.7.9p2"
+    version = "1.8.0"
     url = "http://github.com/pocoproject/conan-poco"
     exports_sources = "CMakeLists.txt"
     generators = "cmake", "txt"
