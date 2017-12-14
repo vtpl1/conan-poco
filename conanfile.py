@@ -112,7 +112,7 @@ cxx_14=False
             cmake.definitions["POCO_MT"] = "ON" if "MT" in str(self.settings.compiler.runtime) else "OFF"
         self.output.info(cmake.definitions)
         os.mkdir("build")
-        cmake.configure(source_dir="../poco", build_dir="build")
+        cmake.configure(source_dir="./poco", build_dir="build")
         cmake.build()
 
     def package(self):
