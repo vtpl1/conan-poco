@@ -9,7 +9,7 @@ class PocoConan(ConanFile):
     name = "Poco"
     version = "1.8.0.1"
     url = "http://github.com/pocoproject/conan-poco"
-    exports_sources = "CMakeLists.txt"
+    exports_sources = "CMakeLists.txt", "PocoMacros.cmake"  # REMOVE POCOMACROS IN NEXT VERSION!
     generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
     license = "The Boost Software License 1.0"
@@ -80,9 +80,7 @@ cxx_14=False
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
         # Patch the PocoMacros.cmake to fix the detection of the win10 sdk.
         # NOTE: ALREADY FIXED IN POCO REPO, REMOVE THIS FOR NEXT VERSION
-        tools.replace_in_file("poco/cmake/PocoMacros.cmake",
-                              '"${sdk_bindir}" "${kit_bindir}" "${kit81_bindir}"',
-                              '"${sdk_bindir}" "${kit_bindir}" ${kit81_bindir}')
+        shutil.move("PocoMacros.cmake", "poco/cmake/PocoMacros.cmake")
 
     def configure(self):
         if self.options.enable_apacheconnector:
