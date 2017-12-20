@@ -78,6 +78,11 @@ cxx_14=False
         os.unlink(zip_name)
         shutil.move("poco/CMakeLists.txt", "poco/CMakeListsOriginal.cmake")
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
+        # Patch the PocoMacros.cmake to fix the detection of the win10 sdk.
+        # NOTE: ALREADY FIXED IN POCO REPO, REMOVE THIS FOR NEXT VERSION
+        tools.replace_in_file("poco/cmake/PocoMacros.cmake",
+                              '"${sdk_bindir}" "${kit_bindir}" "${kit81_bindir}"',
+                              '"${sdk_bindir}" "${kit_bindir}" ${kit81_bindir}')
 
     def configure(self):
         if self.options.enable_apacheconnector:
