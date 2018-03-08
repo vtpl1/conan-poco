@@ -7,9 +7,9 @@ from conans import ConanFile, tools
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.8.0"
+    version = "1.9.0"
     url = "http://github.com/pocoproject/conan-poco"
-    exports_sources = "CMakeLists.txt"
+    exports_sources = "CMakeLists.txt", "PocoMacros.cmake"  # REMOVE POCOMACROS IN NEXT VERSION!
     generators = "cmake", "txt"
     settings = "os", "arch", "compiler", "build_type"
     license = "The Boost Software License 1.0"
@@ -78,6 +78,9 @@ cxx_14=False
         os.unlink(zip_name)
         shutil.move("poco/CMakeLists.txt", "poco/CMakeListsOriginal.cmake")
         shutil.move("CMakeLists.txt", "poco/CMakeLists.txt")
+        # Patch the PocoMacros.cmake to fix the detection of the win10 sdk.
+        # NOTE: ALREADY FIXED IN POCO REPO, REMOVE THIS FOR NEXT VERSION
+        shutil.move("PocoMacros.cmake", "poco/cmake/PocoMacros.cmake")
 
     def configure(self):
         if self.options.enable_apacheconnector:
@@ -85,7 +88,7 @@ cxx_14=False
 
     def requirements(self):
         if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
-            self.requires.add("OpenSSL/1.0.2l@conan/stable", private=False)
+            self.requires.add("OpenSSL/1.0.2m@conan/stable", private=False)
 
         if self.options.enable_data_mysql:
             # self.requires.add("MySQLClient/6.1.6@hklabbers/stable")
