@@ -86,6 +86,15 @@ matrix:
       - <<: *osx
         osx_image: xcode9
         env: CONAN_APPLE_CLANG_VERSIONS=9.0 CONAN_CURRENT_PAGE=3
+      - <<: *osx
+        osx_image: xcode9.3beta
+        env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_CURRENT_PAGE=1
+      - <<: *osx
+        osx_image: xcode9.3beta
+        env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_CURRENT_PAGE=2
+      - <<: *osx
+        osx_image: xcode9.3beta
+        env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_CURRENT_PAGE=3
 
 install:
   - chmod +x .travis/install.sh
