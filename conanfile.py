@@ -131,7 +131,7 @@ cxx_14=False
         packages = ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
                     "Foundation", "JSON", "MongoDB", "Net", "Util",
                     "XML", "Zip"]
-        if self.settings.os == "Windows":
+        if self.settings.os == "Windows" and self.options.enable_netssl_win:
             packages.append("NetSSL_Win")
         else:
             packages.append("NetSSL_OpenSSL")
