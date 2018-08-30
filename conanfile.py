@@ -16,6 +16,7 @@ class PocoConan(ConanFile):
     description = "Modern, powerful open source C++ class libraries for building network- and internet-based " \
                   "applications that run on desktop, server, mobile and embedded systems."
     options = {"shared": [True, False],
+               "fPIC": [True, False],
                "enable_xml": [True, False],
                "enable_json": [True, False],
                "enable_mongodb": [True, False],
@@ -40,9 +41,10 @@ class PocoConan(ConanFile):
                "enable_tests": [True, False],
                "poco_unbundled": [True, False],
                "cxx_14": [True, False]
-               }
+              }
     default_options = '''
 shared=False
+fPIC=True
 enable_xml=True
 enable_json=True
 enable_mongodb=True
@@ -81,6 +83,10 @@ cxx_14=False
         # NOTE: ALREADY FIXED IN POCO REPO, REMOVE THIS FOR NEXT VERSION
         shutil.move("PocoMacros.cmake", "poco/cmake/PocoMacros.cmake")
 
+    def config_options(self):
+        if self.settings.os == "Windows":
+            del self.options.fPIC
+
     def configure(self):
         if self.options.enable_apacheconnector:
             raise Exception("Apache connector not supported: https://github.com/pocoproject/poco/issues/1764")
@@ -107,7 +113,7 @@ cxx_14=False
             activated = getattr(self.options, option_name)
             if option_name == "shared":
                 cmake.definitions["POCO_STATIC"] = "OFF" if activated else "ON"
-            else:
+            elif not option_name == "fPIC":
                 cmake.definitions[option_name.upper()] = "ON" if activated else "OFF"
 
         if self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":  # MT or MTd
