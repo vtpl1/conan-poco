@@ -152,9 +152,9 @@ cxx_14=False
         """
         libs = [("enable_mongodb", "PocoMongoDB"),
                 ("enable_pdf", "PocoPDF"),
-                ("enable_net", "PocoNet"),
                 ("enable_netssl", "PocoNetSSL"),
                 ("enable_netssl_win", "PocoNetSSLWin"),
+                ("enable_net", "PocoNet"),
                 ("enable_crypto", "PocoCrypto"),
                 ("enable_data", "PocoData"),
                 ("enable_data_sqlite", "PocoDataSQLite"),
