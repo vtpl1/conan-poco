@@ -173,8 +173,6 @@ cxx_14=False
                  else ("d" if self.settings.build_type=="Debug" else "")
         for flag, lib in libs:
             if getattr(self.options, flag):
-                if self.settings.os == "Windows" and flag == "enable_netssl":
-                    continue
                 if self.settings.os != "Windows" and flag == "enable_netssl_win":
                     continue
                 self.cpp_info.libs.append("%s%s" % (lib, suffix))
