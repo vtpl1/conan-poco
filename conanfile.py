@@ -37,6 +37,7 @@ class PocoConan(ConanFile):
                "enable_pocodoc": [True, False],
                "enable_pagecompiler": [True, False],
                "enable_pagecompiler_file2page": [True, False],
+               "enable_redis": [True, False],
                "force_openssl": [True, False],  # "Force usage of OpenSSL even under windows"
                "enable_tests": [True, False],
                "poco_unbundled": [True, False],
@@ -65,6 +66,7 @@ enable_cppparser=False
 enable_pocodoc=False
 enable_pagecompiler=False
 enable_pagecompiler_file2page=False
+enable_redis=True
 force_openssl=True
 enable_tests=False
 poco_unbundled=False
@@ -128,7 +130,7 @@ cxx_14=False
         self.copy("poco/LICENSE", dst=".", keep_path=False)
         # Typically includes we want to keep_path=True (default)
         packages = ["CppUnit", "Crypto", "Data", "Data/MySQL", "Data/ODBC", "Data/SQLite",
-                    "Foundation", "JSON", "MongoDB", "Net", "Util",
+                    "Foundation", "JSON", "MongoDB", "Net", "Redis", "Util",
                     "XML", "Zip"]
         if self.settings.os == "Windows" and self.options.enable_netssl_win:
             packages.append("NetSSL_Win")
@@ -165,7 +167,8 @@ cxx_14=False
                 ("enable_apacheconnector", "PocoApacheConnector"),
                 ("enable_util", "PocoUtil"),
                 ("enable_xml", "PocoXML"),
-                ("enable_json", "PocoJSON")]
+                ("enable_json", "PocoJSON"),
+                ("enable_redis", "PocoRedis")]
 
         suffix = str(self.settings.compiler.runtime).lower()  \
                  if self.settings.compiler == "Visual Studio" and not self.options.shared \
