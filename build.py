@@ -1,4 +1,6 @@
-from conan.packager import ConanMultiPackager
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from cpt.packager import ConanMultiPackager
 
 
 if __name__ == "__main__":
