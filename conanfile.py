@@ -7,7 +7,7 @@ from conans import ConanFile, tools
 
 class PocoConan(ConanFile):
     name = "Poco"
-    version = "1.9.2"
+    version = "1.9.3"
     url = "http://github.com/pocoproject/conan-poco"
     exports_sources = "CMakeLists.txt", "PocoMacros.cmake"  # REMOVE POCOMACROS IN NEXT VERSION!
     generators = "cmake", "txt"
@@ -178,7 +178,7 @@ cxx_14=False
             if getattr(self.options, flag):
                 if self.settings.os == "Windows" and flag == "enable_netssl" and self.options.enable_netssl_win:
                     continue
-                
+
                 if self.settings.os != "Windows" and flag == "enable_netssl_win":
                     continue
 
