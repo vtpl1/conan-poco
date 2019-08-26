@@ -57,7 +57,7 @@ enable_netssl_win=True
 enable_crypto=True
 enable_data=True
 enable_data_sqlite=True
-enable_data_mysql=False
+enable_data_mysql=True
 enable_data_odbc=False
 enable_sevenzip=False
 enable_zip=True
@@ -95,11 +95,11 @@ cxx_14=False
 
     def requirements(self):
         if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
-            self.requires.add("OpenSSL/1.0.2o@conan/stable", private=False)
+            self.requires.add("OpenSSL/1.1.1c@conan/stable", private=False)
 
         if self.options.enable_data_mysql:
-            # self.requires.add("MySQLClient/6.1.6@hklabbers/stable")
-            raise Exception("MySQL not supported yet, open an issue here please: %s" % self.url)
+            self.requires.add("mysql-connector-c/6.1.11@bincrafters/stable")
+            # raise Exception("MySQL not supported yet, open an issue here please: %s" % self.url)
 
     def build(self):
         if self.settings.compiler == "Visual Studio" and self.options.shared:
