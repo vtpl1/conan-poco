@@ -2,7 +2,7 @@
 env:
    global:
      - CONAN_REFERENCE: "Poco/1.9.3"
-     - CONAN_USERNAME: "pocoproject"
+     - CONAN_USERNAME: "vtpl1"
      - CONAN_LOGIN_USERNAME: "vtpl1"
      - CONAN_CHANNEL: "stable"
      - CONAN_UPLOAD: "https://api.bintray.com/conan/vtpl1/conan"
