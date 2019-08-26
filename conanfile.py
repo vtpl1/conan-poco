@@ -97,7 +97,7 @@ cxx_14=False
 
     def requirements(self):
         if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
-            self.requires.add("OpenSSL/1.1.1c@conan/stable", private=False)
+            self.requires.add("OpenSSL/1.0.2s@conan/stable", private=False)
 
         if self.options.enable_data_mysql:
             self.requires.add("mysql-connector-c/6.1.11@bincrafters/stable")
