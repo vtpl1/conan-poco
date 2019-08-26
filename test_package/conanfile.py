@@ -20,7 +20,7 @@ class DefaultNameConan(ConanFile):
 
     def test(self):
         self.run("cd bin && .%ssample" % os.sep)
-        self.run("cd bin && .%ssocket" % os.sep)
-        self.run("cd bin && .%shttps" % os.sep)
+        #self.run("cd bin && .%ssocket" % os.sep)
+        #self.run("cd bin && .%shttps" % os.sep)
         self.run("cd bin && .%ssqlite" % os.sep)
         assert os.path.exists(os.path.join(self.deps_cpp_info["Poco"].rootpath, "LICENSE"))
