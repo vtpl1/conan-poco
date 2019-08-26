@@ -92,6 +92,8 @@ cxx_14=False
     def configure(self):
         if self.options.enable_apacheconnector:
             raise Exception("Apache connector not supported: https://github.com/pocoproject/poco/issues/1764")
+        if self.options.enable_data_mysql:
+            self.options["mysql-connector-c"].shared = self.options.shared
 
     def requirements(self):
         if self.options.enable_netssl or self.options.enable_netssl_win or self.options.enable_crypto or self.options.force_openssl:
