@@ -8,7 +8,8 @@ The packages generated with this **conanfile** can be found in [conan.io](https:
 ## Build Status
 
 - Travis: [![Travis Build Status](https://travis-ci.org/vtpl1/conan-poco.svg?branch=master)](https://travis-ci.org/vtpl1/conan-poco)
-- AppVeyor: [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/swn6l4rxpsgn8arg?svg=true)](https://ci.appveyor.com/project/obiltschnig/conan-poco)
+- AppVeyor: [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/5ci3sefvcksaon4q?svg=true)](https://ci.appveyor.com/project/vtpl1/conan-poco)
+
 
 
 ## Build Packages
