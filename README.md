@@ -22,20 +22,20 @@ If your are in Windows you should run it from a VisualStudio console in order to
 
 ## Upload Packages to Server
 
-    $ conan upload Poco/1.9.3@pocoproject/stable --all
+    $ conan upload Poco/1.9.3@vtpl1/stable --all
 
 ## Reuse the Packages
 
 ### Basic Setup
 
-    $ conan install Poco/1.9.3@pocoproject/stable
+    $ conan install Poco/1.9.3@vtpl1/stable
 
 ### Project Setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    Poco/1.9.3@pocoproject/stable
+    Poco/1.9.3@vtpl1/stable
 
     [options]
     Poco:shared=True # False
