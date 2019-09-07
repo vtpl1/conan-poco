@@ -4,7 +4,6 @@ import shutil
 from conans import CMake
 from conans import ConanFile, tools
 
-
 class PocoConan(ConanFile):
     name = "Poco"
     version = "1.9.3"
